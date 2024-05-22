@@ -8,34 +8,33 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import tms.task_management_system.entity.Users;
 import tms.task_management_system.repository.UserRepository;
 
-public class UserServiceTest {
+@SpringBootTest
+class UserServiceTest {
 
-    @Mock
+    @MockBean
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Autowired
     private UserService userService;
 
     private List<Users> userList;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        
         Users user1 = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
         Users user2 = new Users(2L, "Saad Khan", "skhan@gmail.com", "password2", "USER", null);
         userList = Arrays.asList(user1, user2);
     }
 
     @Test
-    public void testGetAllUsers() {
+    void testGetAllUsers() {
         // Given
         when(userRepository.findAll()).thenReturn(userList);
 

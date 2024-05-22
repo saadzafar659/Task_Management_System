@@ -25,7 +25,7 @@ import tms.task_management_system.entity.Users;
 import tms.task_management_system.service.UserService;
 
 @SpringBootTest
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -51,7 +51,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetAllUsers() throws Exception {
+    void testGetAllUsers() throws Exception {
         
     	//Given
         when(userService.getAllUsers()).thenReturn(userList);
