@@ -37,7 +37,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: ${{ runner.os }}-m2-
 
-      - name: Tests
+      - name: Unit Tests
         run: mvn verify -Pjacoco
 
       - name: Coveralls Report
