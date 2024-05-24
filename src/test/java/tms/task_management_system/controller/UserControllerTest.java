@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,4 +74,34 @@ class UserControllerTest {
         // Verify
         verify(userService, times(1)).getAllUsers();
     }
+    
+    
+    
+    @Test
+	public void testGetUserById() throws Exception {
+		// Given
+		Long userId = 1L;
+		when(userService.getUserById(userId)).thenReturn(Optional.of(userList.get(0)));
+
+		// When
+		// Get request
+		mockMvc.perform(get("/api/users/{id}", userId)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1L))
+				.andExpect(jsonPath("$.name").value("Saad Zafar"));
+
+		// Then
+		// Verify
+		verify(userService, times(1)).getUserById(userId);
+	}
+	
+	
+	@Test
+	void testGetUserById_NotFound() throws Exception {
+	    // Given
+	    Long userId = 1L;
+	    when(userService.getUserById(userId)).thenReturn(java.util.Optional.empty());
+
+	    // When and Then
+	    mockMvc.perform(get("/api/users/{id}", userId))
+	        .andExpect(status().isNotFound());
+	}
 }

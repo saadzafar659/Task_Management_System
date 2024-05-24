@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,32 +19,47 @@ import tms.task_management_system.repository.UserRepository;
 @SpringBootTest
 class UserServiceTest {
 
-    @MockBean
-    private UserRepository userRepository;
+	@MockBean
+	private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    private List<Users> userList;
+	private List<Users> userList;
 
-    @BeforeEach
-    public void setUp() {
-        Users user1 = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
-        Users user2 = new Users(2L, "Saad Khan", "skhan@gmail.com", "password2", "USER", null);
-        userList = Arrays.asList(user1, user2);
-    }
+	@BeforeEach
+	public void setUp() {
+		Users user1 = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
+		Users user2 = new Users(2L, "Saad Khan", "skhan@gmail.com", "password2", "USER", null);
+		userList = Arrays.asList(user1, user2);
+	}
 
-    @Test
-    void testGetAllUsers() {
-        // Given
-        when(userRepository.findAll()).thenReturn(userList);
+	@Test
+	void testGetAllUsers() {
+		// Given
+		when(userRepository.findAll()).thenReturn(userList);
 
-        // When
-        List<Users> result = userService.getAllUsers();
+		// When
+		List<Users> result = userService.getAllUsers();
 
-        // Then
-        assertEquals(2, result.size());
-        assertEquals("Saad Zafar", result.get(0).getName());
-        assertEquals("Saad Khan", result.get(1).getName());
-    }
+		// Then
+		// assert
+		assertEquals(2, result.size());
+		assertEquals("Saad Zafar", result.get(0).getName());
+		assertEquals("Saad Khan", result.get(1).getName());
+	}
+
+	@Test
+	void testGetUserById() {
+		// Given
+		Long userId = 1L;
+		when(userRepository.findById(userId)).thenReturn(Optional.of(userList.get(0)));
+
+		// When
+		Optional<Users> result = userService.getUserById(userId);
+
+		// Then
+		// assert
+		assertEquals("Saad Zafar", result.get().getName());
+	}
 }
