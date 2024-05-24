@@ -78,7 +78,7 @@ class UserControllerTest {
     
     
     @Test
-	public void testGetUserById() throws Exception {
+	void testGetUserById() throws Exception {
 		// Given
 		Long userId = 1L;
 		when(userService.getUserById(userId)).thenReturn(Optional.of(userList.get(0)));
