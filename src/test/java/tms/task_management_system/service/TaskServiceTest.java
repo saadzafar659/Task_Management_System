@@ -1,6 +1,7 @@
 package tms.task_management_system.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -62,5 +63,24 @@ class TaskServiceTest {
 		// assert
 		assertEquals("Title1", result.get().getTitle());
 	}
+	
+	 @Test
+	    void testSaveTask() {
+	        // Given
+	        Task task = new Task(1L, "Title1", "Description1", "2024-12-31", "Pending", null);
+
+	        Task savedTask = new Task(1L, "Title1", "Description1", "2024-12-31", "Pending", null);
+	        
+	        when(taskRepository.save(task)).thenReturn(savedTask);
+
+	        // When
+	        Task result = taskService.saveTask(task);
+
+	        // Then
+	        // assert
+	        assertEquals(savedTask.getId(), result.getId());
+	        assertEquals(savedTask.getTitle(), result.getTitle());
+	        verify(taskRepository).save(task);
+	    }
 
 }

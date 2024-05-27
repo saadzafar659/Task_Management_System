@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "\"task\"")
@@ -17,9 +18,17 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @NotBlank(message = "Title cannot be empty")
     private String title;
+    
+    
     private String description;
+    
+    
     private String deadline;
+    
+    
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
