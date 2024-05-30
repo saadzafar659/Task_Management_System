@@ -4,12 +4,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.http.MediaType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -127,9 +129,9 @@ class TaskControllerTest {
 		// Post request
 		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(validTaskDTO)))
-		// Then
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.id").value(3L)).andExpect(jsonPath("$.title").value("New Task Title"))
+				// Then
+				.andExpect(status().isCreated()).andExpect(jsonPath("$.id").value(3L))
+				.andExpect(jsonPath("$.title").value("New Task Title"))
 				.andExpect(jsonPath("$.description").value("Description of the new task"))
 				.andExpect(jsonPath("$.deadline").value("2024-12-31")).andExpect(jsonPath("$.status").value("Pending"));
 		// Verify
@@ -143,9 +145,8 @@ class TaskControllerTest {
 		// Post request
 		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(emptyTitleTaskDTO)))
-		// Then
-		.andExpect(status().isBadRequest())
-				.andExpect(content().string("Title cannot be empty"));
+				// Then
+				.andExpect(status().isBadRequest()).andExpect(content().string("Title cannot be empty"));
 		// Verify
 		verify(userService, times(0)).getUserById(any(Long.class));
 		verify(taskService, times(0)).saveTask(any(Task.class));
@@ -170,10 +171,103 @@ class TaskControllerTest {
 		// Post request
 		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(validTaskDTO)))
-		// Then
-		.andExpect(status().isNotFound());
+				// Then
+				.andExpect(status().isNotFound());
 		// Verify
 		verify(userService, times(1)).getUserById(1L);
 		verify(taskService, times(0)).saveTask(any(Task.class));
+	}
+
+	@Test
+	void testUpdateTask() throws Exception {
+		Long taskId = 1L;
+
+		// Given
+		when(taskService.getTaskById(taskId)).thenReturn(Optional.of(task));
+		when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+		when(taskService.saveTask(any(Task.class))).thenReturn(task);
+		// When
+		// Put request
+		mockMvc.perform(put("/api/tasks/update/{id}", taskId).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(validTaskDTO)))
+				// Then
+				.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(3L))
+				.andExpect(jsonPath("$.title").value("New Task Title"));
+		// Verify
+		verify(taskService, times(1)).getTaskById(taskId);
+		verify(userService, times(1)).getUserById(1L);
+		verify(taskService, times(1)).saveTask(any(Task.class));
+	}
+
+	@Test
+	void testUpdateTask_NotFound() throws Exception {
+		Long taskId = 1L;
+
+		// Given
+		when(taskService.getTaskById(taskId)).thenReturn(Optional.empty());
+		// When
+		// Put request
+		mockMvc.perform(put("/api/tasks/update/{id}", taskId).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(validTaskDTO)))
+				// Then
+				.andExpect(status().isNotFound());
+		// Verify
+		verify(taskService, times(1)).getTaskById(taskId);
+		verify(userService, times(0)).getUserById(any(Long.class));
+		verify(taskService, times(0)).saveTask(any(Task.class));
+	}
+	
+	
+	@Test
+	void testUpdateTask_UserNotFound() throws Exception {
+	    Long taskId = 1L;
+
+	    // Given
+	    when(taskService.getTaskById(taskId)).thenReturn(Optional.of(task));
+	    when(userService.getUserById(1L)).thenReturn(Optional.empty());
+
+	    // When
+	    // Put request
+	    mockMvc.perform(put("/api/tasks/update/{id}", taskId)
+	            .contentType(MediaType.APPLICATION_JSON)
+	            .content(objectMapper.writeValueAsString(validTaskDTO)))
+	            // Then
+	            .andExpect(status().isNotFound());
+
+	    // Verify
+	    verify(taskService, times(1)).getTaskById(taskId);
+	    verify(userService, times(1)).getUserById(1L);
+	    verify(taskService, times(0)).saveTask(any(Task.class));
+	}
+
+	@Test
+	void testDeleteTask() throws Exception {
+		Long taskId = 1L;
+
+		// Given
+		when(taskService.getTaskById(taskId)).thenReturn(Optional.of(task));
+		// When
+		// Delete request
+		mockMvc.perform(delete("/api/tasks/delete/{id}", taskId))
+				// Then
+				.andExpect(status().isNoContent());
+		// Verify
+		verify(taskService, times(1)).getTaskById(taskId);
+		verify(taskService, times(1)).deleteTaskById(taskId);
+	}
+
+	@Test
+	void testDeleteTask_NotFound() throws Exception {
+		Long taskId = 1L;
+		// Given
+		when(taskService.getTaskById(taskId)).thenReturn(Optional.empty());
+		// When
+		// Delete request
+		mockMvc.perform(delete("/api/tasks/delete/{id}", taskId))
+				// Then
+				.andExpect(status().isNotFound());
+		// Verify
+		verify(taskService, times(1)).getTaskById(taskId);
+		verify(taskService, times(0)).deleteTaskById(taskId);
 	}
 }

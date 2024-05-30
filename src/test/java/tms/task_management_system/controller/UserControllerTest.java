@@ -4,8 +4,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -124,4 +126,75 @@ class UserControllerTest {
 		// Verify
 		verify(userService, times(1)).saveUser(any(Users.class));
 	}
+	
+	
+	@Test
+	void testUpdateUser() throws Exception {
+	    // Given
+	    when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+	    when(userService.saveUser(any(Users.class))).thenReturn(user);
+
+	    // When
+	    // PUT request
+	    mockMvc.perform(put("/api/users/update/1")
+	            .contentType(MediaType.APPLICATION_JSON)
+	            .content(objectMapper.writeValueAsString(userDTO)))
+	            // Then
+	            .andExpect(status().isOk());
+	    // Verify
+	    verify(userService, times(1)).getUserById(1L);
+	    verify(userService, times(1)).saveUser(any(Users.class));
+	}
+
+	@Test
+	void testUpdateUser_NotFound() throws Exception {
+	    // Given
+	    when(userService.getUserById(1L)).thenReturn(Optional.empty());
+
+	    // When
+	    // PUT request
+	    mockMvc.perform(put("/api/users/update/1")
+	            .contentType(MediaType.APPLICATION_JSON)
+	            .content(objectMapper.writeValueAsString(userDTO)))
+	            // Then
+	            .andExpect(status().isNotFound());
+
+	    // Verify
+	    verify(userService, times(1)).getUserById(1L);
+	    verify(userService, times(0)).saveUser(any(Users.class));
+	}
+
+	@Test
+	void testDeleteUser() throws Exception {
+	    // Given
+	    when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+
+	    // When
+	    // DELETE request
+	    mockMvc.perform(delete("/api/users/delete/1"))
+	            // Then
+	            // Expect the status to be No Content
+	            .andExpect(status().isNoContent());
+
+	    // Verify
+	    verify(userService, times(1)).getUserById(1L);
+	    verify(userService, times(1)).deleteUserById(1L);
+	}
+
+	@Test
+	void testDeleteUser_NotFound() throws Exception {
+	    // Given
+	    when(userService.getUserById(1L)).thenReturn(Optional.empty());
+
+	    // When
+	    // DELETE request
+	    mockMvc.perform(delete("/api/users/delete/1"))
+	            // Then
+	            .andExpect(status().isNotFound());
+
+	    // Verify
+	    verify(userService, times(1)).getUserById(1L);
+	    verify(userService, times(0)).deleteUserById(1L);
+	}
+
 }

@@ -1,6 +1,7 @@
 package tms.task_management_system.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -81,5 +82,18 @@ class UserServiceTest {
 		assertEquals(savedUser.getId(), result.getId());
 		assertEquals(savedUser.getName(), result.getName());
 		verify(userRepository).save(user);
+	}
+
+	@Test
+	void testDeleteUserById() {
+		// Given
+		Long userId = 1L;
+
+		// When
+		userService.deleteUserById(userId);
+
+		// Then
+		// verify
+		verify(userRepository, times(1)).deleteById(userId);
 	}
 }
