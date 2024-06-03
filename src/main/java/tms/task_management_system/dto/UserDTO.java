@@ -1,5 +1,7 @@
 package tms.task_management_system.dto;
 
+import tms.task_management_system.entity.Users;
+
 public class UserDTO {
 	private Long id;
 	private String name;
@@ -46,7 +48,17 @@ public class UserDTO {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
+	
+	public Users toUser() {
+        Users user = new Users();
+        user.setId(this.id);
+        user.setName(this.name);
+        user.setEmail(this.email);
+        user.setPassword(this.password);
+        user.setRole(this.role);
+        return user;
+    }
+	
 	public UserDTO(Long id, String name, String email, String password, String role) {
 		super();
 		this.id = id;

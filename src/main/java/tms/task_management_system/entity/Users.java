@@ -24,7 +24,7 @@ public class Users {
     private String role;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties({"user", "hibernateLazyInitializer", "handler"})
     private List<Task> tasks;
 
 	public Long getId() {

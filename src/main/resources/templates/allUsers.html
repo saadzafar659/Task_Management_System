@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Users</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+</head>
+<body>
+	<div th:replace="~{navbar.html}"></div>
+	<div th:if="${message}" class="flash-message">
+        <p th:text="${message}"></p>
+    </div>
+    <h1>All Users</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+             <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.role}"></td>
+                
+                <td>
+                    <a th:href="@{'/users/edit/' + ${user.id}}">Edit</a>
+                    <a th:href="@{'/users/delete/' + ${user.id}}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+        </tbody>
+    </table>
+</body>
+</html>

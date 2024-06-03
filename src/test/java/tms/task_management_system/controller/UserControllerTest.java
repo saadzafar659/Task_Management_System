@@ -173,7 +173,6 @@ class UserControllerTest {
 	    // DELETE request
 	    mockMvc.perform(delete("/api/users/delete/1"))
 	            // Then
-	            // Expect the status to be No Content
 	            .andExpect(status().isNoContent());
 
 	    // Verify
