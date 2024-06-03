@@ -18,6 +18,8 @@ import tms.task_management_system.service.UserService;
 public class UserWebController {
 
 	private static final String REDIRECT_USERS = "redirect:/users";
+	
+	 private static final String FLASH_MESSAGE_KEY = "message";
 
 	private final UserService userService;
 
@@ -42,7 +44,7 @@ public class UserWebController {
 			@RequestParam String role, RedirectAttributes redirectAttributes) {
 		UserDTO userDTO = new UserDTO(null, name, email, password, role);
 		userService.saveUser(userDTO.toUser());
-		redirectAttributes.addFlashAttribute("message", "User created successfully!");
+		redirectAttributes.addFlashAttribute(FLASH_MESSAGE_KEY, "User created successfully!");
 		return REDIRECT_USERS;
 	}
 
@@ -58,14 +60,14 @@ public class UserWebController {
 			@RequestParam String password, @RequestParam String role, RedirectAttributes redirectAttributes) {
 		UserDTO userDTO = new UserDTO(id, name, email, password, role);
 		userService.saveUser(userDTO.toUser());
-		redirectAttributes.addFlashAttribute("message", "User updated successfully!");
+		redirectAttributes.addFlashAttribute(FLASH_MESSAGE_KEY, "User updated successfully!");
 		return REDIRECT_USERS;
 	}
 
 	@GetMapping("/users/delete/{id}")
 	public String deleteUserById(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 		userService.deleteUserById(id);
-		redirectAttributes.addFlashAttribute("message", "User deleted successfully!");
+		redirectAttributes.addFlashAttribute(FLASH_MESSAGE_KEY, "User deleted successfully!");
 		return REDIRECT_USERS;
 	}
 

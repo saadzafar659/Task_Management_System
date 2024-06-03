@@ -32,7 +32,7 @@ import tms.task_management_system.entity.Users;
 import tms.task_management_system.service.UserService;
 
 @WebMvcTest(UserWebController.class)
-public class UserWebControllerTest {
+class UserWebControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -63,7 +63,7 @@ public class UserWebControllerTest {
 	}
 
 	@Test
-	public void testGetAllUsers() throws Exception {
+	void testGetAllUsers() throws Exception {
 		// Given
 		given(userService.getAllUsers()).willReturn(userList);
 
@@ -75,7 +75,7 @@ public class UserWebControllerTest {
 	}
 
 	@Test
-	public void testShowSaveUserForm() throws Exception {
+	void testShowSaveUserForm() throws Exception {
 		// When
 		// Then
 		// GET request
@@ -83,7 +83,7 @@ public class UserWebControllerTest {
 	}
 
 	@Test
-	public void testSaveUser() throws Exception {
+	void testSaveUser() throws Exception {
 		// When
 		// Then
 		// POST request
@@ -102,7 +102,7 @@ public class UserWebControllerTest {
 	}
 
 	@Test
-	public void testShowEditUserForm() throws Exception {
+	void testShowEditUserForm() throws Exception {
 		// Given
 		given(userService.getUserById(1L)).willReturn(Optional.of(user));
 
@@ -114,7 +114,7 @@ public class UserWebControllerTest {
 	}
 
 	@Test
-	public void testUpdateUser() throws Exception {
+	void testUpdateUser() throws Exception {
 		// When
 		// Then
 		// Edit request
@@ -134,7 +134,7 @@ public class UserWebControllerTest {
 	}
 
 	@Test
-	public void testDeleteUserById() throws Exception {
+	 void testDeleteUserById() throws Exception {
 		// When
 		// Then
 		// DELETE request
