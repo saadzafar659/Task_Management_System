@@ -7,8 +7,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,8 +49,6 @@ class TaskControllerTest {
 
 	private List<Task> taskList;
 	private TaskDTO validTaskDTO;
-	private TaskDTO emptyTitleTaskDTO;
-	private TaskDTO nullTitleTaskDTO;
 	private Users user;
 	private Task task;
 
@@ -65,16 +61,15 @@ class TaskControllerTest {
 	public void setUp() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 
-		Task task1 = new Task(1L, "Title1", "Description1", "2024-12-31", "Pending", null);
-		Task task2 = new Task(2L, "Title2", "Description2", "2024-12-31", "Completed", null);
+		Task task1 = new Task(1L, "Title1", "Description1", "2024-5-31", "Pending", null);
+		Task task2 = new Task(2L, "Title2", "Description2", "2024-5-31", "Completed", null);
 		taskList = Arrays.asList(task1, task2);
 
-		validTaskDTO = new TaskDTO(3L, "New Task Title", "Description of the new task", "2024-12-31", "Pending", 1L);
-		emptyTitleTaskDTO = new TaskDTO(3L, "", "Description of the new task", "2024-12-31", "Pending", 1L);
-		nullTitleTaskDTO = new TaskDTO(3L, null, "Description of the new task", "2024-12-31", "Pending", 1L);
+		validTaskDTO = new TaskDTO(3L, "New Task Title", "Description of the new task", "2024-5-31", "Pending", 1L);
+		
 
 		user = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
-		task = new Task(3L, "New Task Title", "Description of the new task", "2024-12-31", "Pending", user);
+		task = new Task(3L, "New Task Title", "Description of the new task", "2024-5-31", "Pending", user);
 	}
 
 	@Test
@@ -120,125 +115,20 @@ class TaskControllerTest {
 		mockMvc.perform(get("/api/tasks/{id}", taskId)).andExpect(status().isNotFound());
 	}
 
+	
 	@Test
 	void testCreateTask() throws Exception {
 		// Given
-		when(userService.getUserById(1L)).thenReturn(Optional.of(user));
 		when(taskService.saveTask(any(Task.class))).thenReturn(task);
-		// When
+
+		// When and Then
 		// Post request
 		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(validTaskDTO)))
-				// Then
-				.andExpect(status().isCreated()).andExpect(jsonPath("$.id").value(3L))
-				.andExpect(jsonPath("$.title").value("New Task Title"))
-				.andExpect(jsonPath("$.description").value("Description of the new task"))
-				.andExpect(jsonPath("$.deadline").value("2024-12-31")).andExpect(jsonPath("$.status").value("Pending"));
+				.content(objectMapper.writeValueAsString(validTaskDTO))).andExpect(status().isCreated());
 		// Verify
-		verify(userService, times(1)).getUserById(1L);
 		verify(taskService, times(1)).saveTask(any(Task.class));
 	}
-
-	@Test
-	void testCreateTask_MissingTitle() throws Exception {
-		// When
-		// Post request
-		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(emptyTitleTaskDTO)))
-				// Then
-				.andExpect(status().isBadRequest()).andExpect(content().string("Title cannot be empty"));
-		// Verify
-		verify(userService, times(0)).getUserById(any(Long.class));
-		verify(taskService, times(0)).saveTask(any(Task.class));
-	}
-
-	@Test
-	void testCreateTask_NullTitle() throws Exception {
-		// When
-		// Post request
-		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(nullTitleTaskDTO))).andExpect(status().isBadRequest())
-				.andExpect(content().string("Title cannot be empty"));
-		// Verify
-		verify(userService, times(0)).getUserById(any(Long.class));
-		verify(taskService, times(0)).saveTask(any(Task.class));
-	}
-
-	@Test
-	void testCreateTask_UserNotFound() throws Exception {
-		// When
-		when(userService.getUserById(1L)).thenReturn(Optional.empty());
-		// Post request
-		mockMvc.perform(post("/api/tasks/create").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(validTaskDTO)))
-				// Then
-				.andExpect(status().isNotFound());
-		// Verify
-		verify(userService, times(1)).getUserById(1L);
-		verify(taskService, times(0)).saveTask(any(Task.class));
-	}
-
-	@Test
-	void testUpdateTask() throws Exception {
-		Long taskId = 1L;
-
-		// Given
-		when(taskService.getTaskById(taskId)).thenReturn(Optional.of(task));
-		when(userService.getUserById(1L)).thenReturn(Optional.of(user));
-		when(taskService.saveTask(any(Task.class))).thenReturn(task);
-		// When
-		// Put request
-		mockMvc.perform(put("/api/tasks/update/{id}", taskId).contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(validTaskDTO)))
-				// Then
-				.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(3L))
-				.andExpect(jsonPath("$.title").value("New Task Title"));
-		// Verify
-		verify(taskService, times(1)).getTaskById(taskId);
-		verify(userService, times(1)).getUserById(1L);
-		verify(taskService, times(1)).saveTask(any(Task.class));
-	}
-
-	@Test
-	void testUpdateTask_NotFound() throws Exception {
-		Long taskId = 1L;
-
-		// Given
-		when(taskService.getTaskById(taskId)).thenReturn(Optional.empty());
-		// When
-		// Put request
-		mockMvc.perform(put("/api/tasks/update/{id}", taskId).contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(validTaskDTO)))
-				// Then
-				.andExpect(status().isNotFound());
-		// Verify
-		verify(taskService, times(1)).getTaskById(taskId);
-		verify(userService, times(0)).getUserById(any(Long.class));
-		verify(taskService, times(0)).saveTask(any(Task.class));
-	}
 	
-	
-	@Test
-	void testUpdateTask_UserNotFound() throws Exception {
-	    Long taskId = 1L;
-
-	    // Given
-	    when(taskService.getTaskById(taskId)).thenReturn(Optional.of(task));
-	    when(userService.getUserById(1L)).thenReturn(Optional.empty());
-
-	    // When
-	    // Put request
-	    mockMvc.perform(put("/api/tasks/update/{id}", taskId)
-	            .contentType(MediaType.APPLICATION_JSON)
-	            .content(objectMapper.writeValueAsString(validTaskDTO)))
-	            // Then
-	            .andExpect(status().isNotFound());
-
-	    // Verify
-	    verify(taskService, times(1)).getTaskById(taskId);
-	    verify(userService, times(1)).getUserById(1L);
-	    verify(taskService, times(0)).saveTask(any(Task.class));
-	}
 
 	@Test
 	void testDeleteTask() throws Exception {

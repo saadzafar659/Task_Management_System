@@ -1,5 +1,8 @@
 package tms.task_management_system.dto;
 
+import tms.task_management_system.entity.Task;
+import tms.task_management_system.entity.Users;
+
 public class TaskDTO 
 {
 	
@@ -45,6 +48,25 @@ public class TaskDTO
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
+	
+	
+	public Task toTask() {
+        Task task = new Task();
+        task.setId(this.id);
+        task.setTitle(this.title);
+        task.setDescription(this.description);
+        task.setDeadline(this.deadline);
+        task.setStatus(this.status);
+        
+        Users user = new Users();
+        user.setId(this.userId);
+        task.setUser(user);
+        
+        return task;
+    }
+
+	
 	public TaskDTO(Long id, String title, String description, String deadline, String status, Long userId) {
 		super();
 		this.id = id;

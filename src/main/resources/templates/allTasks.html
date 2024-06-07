@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Tasks</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+    <div th:replace="~{navbar.html}"></div>
+    <div th:if="${message}" class="flash-message">
+        <p th:text="${message}"></p>
+    </div>
+    <h1>All Tasks</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>User</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.title}"></td>
+                <td th:text="${task.description}"></td>
+                <td th:text="${task.deadline}"></td>
+                <td th:text="${task.status}"></td>
+               <!--  <td th:text="${task.user.name}"></td> -->
+               
+               <td th:if="${task.user != null}" th:text="${task.user.name}"></td>
+    <td th:unless="${task.user != null}">No user assigned</td>
+                <td><a th:href="@{'/tasks/edit/' + ${task.id}}">Edit</a> 
+                <a th:href="@{'/tasks/delete/' + ${task.id}}">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
