@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import tms.task_management_system.con.Conn;
+import tms.task_management_system.dto.UserDTO;
 import tms.task_management_system.entity.Users;
 import tms.task_management_system.repository.UserRepository;
 
@@ -34,11 +35,15 @@ class UserControllerTestIT extends Conn {
 	private UserRepository userRepository;
 
 	private List<Users> userList;
+	private UserDTO userDTO;
 
 	@BeforeEach
 	@Transactional
 	public void setUp() {
 		userRepository.deleteAll();
+		
+		userDTO = new UserDTO(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN");
+		
 		Users user1 = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
 		Users user2 = new Users(2L, "Saad Khan", "skhan@gmail.com", "password2", "USER", null);
 		userList = Arrays.asList(user1, user2);
@@ -47,7 +52,6 @@ class UserControllerTestIT extends Conn {
 	}
 
 	@Test
-	@Transactional
 	void testGetAllUsers() {
 		// When
 		ResponseEntity<Users[]> response = restTemplate.getForEntity("http://localhost:" + port + "/api/users/getAll",
@@ -55,11 +59,22 @@ class UserControllerTestIT extends Conn {
 
 		// Assert
 		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-		assertThat(response.getBody().length, equalTo(1));
+		assertThat(response.getBody().length, equalTo(2));
+	}
+	
+	@Test
+	void testCreateUser() {
+		// When
+		ResponseEntity<UserDTO> response = restTemplate.postForEntity("http://localhost:" + port + "/api/users/create",
+				userDTO, UserDTO.class);
+
+		// Assert
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+		assertThat(response.getBody().getName(), equalTo(userDTO.getName()));
+		assertThat(userRepository.findById(response.getBody().getId()).isPresent(), is(true));
 	}
 
 	@Test
-	@Transactional
 	void testDeleteUser() {
 		// Given
 		Users savedUser = userList.get(0);
