@@ -30,10 +30,10 @@ public class Task {
     
     
     private String status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"tasks", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties("tasks")
     private Users user;
 
 	public Long getId() {

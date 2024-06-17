@@ -2,8 +2,7 @@ package tms.task_management_system.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,8 +22,8 @@ public class Users {
     private String password;
     private String role;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnoreProperties({"user", "hibernateLazyInitializer", "handler"})
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
 	public Long getId() {
