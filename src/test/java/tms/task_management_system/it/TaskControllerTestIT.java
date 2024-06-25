@@ -75,7 +75,7 @@ class TaskControllerTestIT extends Conn {
 	@Test
 	void testGetTaskById() {
 		// Given
-		Task savedTask = taskRepository.findAll().get(0); // Ensure the task is fetched from the repository
+		Task savedTask = taskRepository.findAll().get(0); 
 
 		// When
 		ResponseEntity<Task> response = restTemplate

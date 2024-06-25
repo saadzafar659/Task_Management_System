@@ -31,8 +31,8 @@ class TaskServiceTest {
 
 	@BeforeEach
 	public void setUp() {
-		Task task1 = new Task(1L, "Title1", "Description1", "2024-12-31", "Pending", null);
-		Task task2 = new Task(2L, "Title2", "Description2", "2024-12-31", "Completed", null);
+		Task task1 = new Task(1L, "Title1", "Description1", "2024-5-31", "Pending", null);
+		Task task2 = new Task(2L, "Title2", "Description2", "2024-5-31", "Completed", null);
 		taskList = Arrays.asList(task1, task2);
 	}
 
@@ -68,9 +68,9 @@ class TaskServiceTest {
 	@Test
 	void testSaveTask() {
 		// Given
-		Task task = new Task(1L, "Title1", "Description1", "2024-12-31", "Pending", null);
+		Task task = new Task(1L, "Title1", "Description1", "2024-5-31", "Pending", null);
 
-		Task savedTask = new Task(1L, "Title1", "Description1", "2024-12-31", "Pending", null);
+		Task savedTask = new Task(1L, "Title1", "Description1", "2024-5-31", "Pending", null);
 
 		when(taskRepository.save(task)).thenReturn(savedTask);
 

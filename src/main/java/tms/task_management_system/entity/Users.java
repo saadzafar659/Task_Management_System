@@ -22,7 +22,6 @@ public class Users {
     private String password;
     private String role;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 

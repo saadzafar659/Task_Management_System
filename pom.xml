@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.0</version>
+		<version>3.3.1</version>
 		<relativePath />
 	</parent>
 	<groupId>tms</groupId>
@@ -91,11 +91,37 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
+
 
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
@@ -193,8 +219,39 @@
 				</dependencies>
 			</plugin>
 		</plugins>
-
-
+		<finalName>Task-Management-System</finalName>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>
+			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.6.3</version>
+				<configuration>
+					<skip>false</skip>
+					<reportsDirectory>
+						${project.build.directory}/pit-custom-output-dir</reportsDirectory>
+					<sourceDataFormats>
+						<sourceDataFormat>HTML</sourceDataFormat>
+					</sourceDataFormats>
+					<siteReportName>my-pit-report-name</siteReportName>
+					<siteReportDescription>my pit report custom description</siteReportDescription>
+					<siteReportDirectory>pit-custom-site-directory</siteReportDirectory>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
