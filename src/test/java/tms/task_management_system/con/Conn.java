@@ -36,6 +36,6 @@ public abstract class Conn {
 
     @AfterAll
     public static void stopContainer() {
-        mysql5Container.stop();
+        
     }
 }

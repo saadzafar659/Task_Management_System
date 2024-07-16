@@ -26,7 +26,7 @@ import tms.task_management_system.repository.TaskRepository;
 import tms.task_management_system.repository.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskWebControllerE2E extends Conn {
+class TestTaskWebControllerE2E extends Conn {
 
     @LocalServerPort
     private int port;

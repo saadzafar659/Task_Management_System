@@ -23,7 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserWebControllerE2E extends Conn {
+class TestUserWebControllerE2E extends Conn {
 
 	@LocalServerPort
 	private int port;

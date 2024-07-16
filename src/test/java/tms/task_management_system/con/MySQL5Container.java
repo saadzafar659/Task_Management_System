@@ -29,8 +29,5 @@ public class MySQL5Container extends MySQLContainer<MySQL5Container> {
         System.setProperty("DB_PASSWORD", container.getPassword());
     }
 
-    @Override
-    public void stop() {
-        
-    }
+
 }
