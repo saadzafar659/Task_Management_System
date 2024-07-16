@@ -83,6 +83,21 @@
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.7.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -98,24 +113,34 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*IT.java</exclude>
+						<exclude>**/*E2E.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>integration-test</id>
+						 <id>default-it</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>e2e-tests</id>
 						<goals>
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
 						<configuration>
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
 							<includes>
-								<include>**/*IT.java</include>
+								<include>**/*E2E.java</include>
 							</includes>
 						</configuration>
 					</execution>
@@ -193,6 +218,7 @@
 					</targetClasses>
 					<excludedTestClasses>
 						<param>tms.task_management_system.**IT</param>
+						<param>tms.task_management_system.**E2E</param>
 					</excludedTestClasses>
 					<targetTests>
 						<param>tms.task_management_system.controller.*</param>
