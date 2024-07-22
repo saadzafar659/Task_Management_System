@@ -215,6 +215,8 @@
 				<configuration>
 					<targetClasses>
 						<param>tms.task_management_system.controller.*</param>
+						<param>tms.task_management_system.service.*</param>
+						
 					</targetClasses>
 					<excludedTestClasses>
 						<param>tms.task_management_system.**IT</param>
@@ -222,6 +224,7 @@
 					</excludedTestClasses>
 					<targetTests>
 						<param>tms.task_management_system.controller.*</param>
+						<param>tms.task_management_system.service.*</param>
 					</targetTests>
 					<avoidCallsTo>
 						<avoidCallsTo>java.util.logging</avoidCallsTo>
