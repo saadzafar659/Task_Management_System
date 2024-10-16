@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Index Page</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Welcome to the Task Management System</h1>
+    <ul>
+        <li><a th:href="@{/tasks}">View Tasks</a></li>
+        <li><a th:href="@{/users}">View Users</a></li>
+    </ul>
+</body>
+</html>

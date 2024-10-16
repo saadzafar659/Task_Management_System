@@ -28,6 +28,11 @@ public class TaskWebController {
         this.taskService = taskService;
         this.userService = userService;
     }
+    
+    @GetMapping("/")
+    public String showHomePage() {
+        return "index";
+    }
 
     @GetMapping("/tasks")
     public String getAllTasks(Model model) {
