@@ -157,4 +157,11 @@ class TaskWebControllerTest {
         // Then
         verify(taskService, times(1)).deleteTaskById(1L);
     }
+    
+    @Test
+    public void testShowHomePage() throws Exception {
+        // When
+    	// Then
+    	mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
+    }
 }
