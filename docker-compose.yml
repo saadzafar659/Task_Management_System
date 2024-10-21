@@ -1,0 +1,19 @@
+services:
+  task_management_mysql:
+    image: mysql:5.7
+    container_name: task_management_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: task_management
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpass 
+      MYSQL_ROOT_PASSWORD: root_password 
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+    driver: local
+

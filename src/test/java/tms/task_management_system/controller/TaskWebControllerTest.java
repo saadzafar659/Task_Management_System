@@ -159,7 +159,7 @@ class TaskWebControllerTest {
     }
     
     @Test
-    public void testShowHomePage() throws Exception {
+    void testShowHomePage() throws Exception {
         // When
     	// Then
     	mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
