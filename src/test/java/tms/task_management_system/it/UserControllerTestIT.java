@@ -39,9 +39,9 @@ class UserControllerTestIT extends Conn {
 	@BeforeEach
 	public void setUp() {
 		userRepository.deleteAll();
-		
+
 		userDTO = new UserDTO(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN");
-		
+
 		Users user1 = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
 		Users user2 = new Users(2L, "Saad Khan", "skhan@gmail.com", "password2", "USER", null);
 		userList = Arrays.asList(user1, user2);
@@ -59,7 +59,7 @@ class UserControllerTestIT extends Conn {
 		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 		assertThat(response.getBody().length, equalTo(2));
 	}
-	
+
 	@Test
 	void testCreateUser() {
 		// When

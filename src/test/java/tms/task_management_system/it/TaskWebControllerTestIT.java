@@ -25,94 +25,94 @@ import tms.task_management_system.repository.UserRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TaskWebControllerTestIT extends Conn {
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+	@Autowired
+	private TestRestTemplate restTemplate;
 
-    @Autowired
-    private TaskRepository taskRepository;
+	@Autowired
+	private TaskRepository taskRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    private List<Task> taskList;
-    private Users user;
+	private List<Task> taskList;
+	private Users user;
 
-    @BeforeEach
-    public void setUp() {
-        taskRepository.deleteAll();
-        userRepository.deleteAll();
+	@BeforeEach
+	public void setUp() {
+		taskRepository.deleteAll();
+		userRepository.deleteAll();
 
-        user = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
-        user = userRepository.save(user);
+		user = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
+		user = userRepository.save(user);
 
-        Task task1 = new Task(1L, "Title1", "Description1", "2024-5-31", "Pending", user);
-        Task task2 = new Task(2L, "Title2", "Description2", "2024-5-31", "Completed", user);
-        taskList = List.of(task1, task2);
-        taskRepository.saveAll(taskList);
-    }
+		Task task1 = new Task(1L, "Title1", "Description1", "2024-5-31", "Pending", user);
+		Task task2 = new Task(2L, "Title2", "Description2", "2024-5-31", "Completed", user);
+		taskList = List.of(task1, task2);
+		taskRepository.saveAll(taskList);
+	}
 
-    @Test
-    void testGetAllTasks() {
-        // When
-        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/tasks",
-                String.class);
-       
-        // Then
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+	@Test
+	void testGetAllTasks() {
+		// When
+		ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/tasks",
+				String.class);
 
-        // Assert
-        assertThat(response.getBody().contains("Title1"), is(true));
-        assertThat(response.getBody().contains("Title2"), is(true));
-    }
+		// Then
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 
-    @Test
-    void testShowSaveTaskForm() {
-        
-        // When
-        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/tasks/create",
-                String.class);
+		// Assert
+		assertThat(response.getBody().contains("Title1"), is(true));
+		assertThat(response.getBody().contains("Title2"), is(true));
+	}
 
-        // Then
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+	@Test
+	void testShowSaveTaskForm() {
 
-        // Assert
-        assertThat(response.getBody().contains("Create Task"), is(true));
-    }
+		// When
+		ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/tasks/create",
+				String.class);
 
-    @Test
-    void testShowEditTaskForm() {
-        // Given
-        Task task = taskRepository.findAll().get(0);
+		// Then
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 
-        // When
-        ResponseEntity<String> response = restTemplate
-                .getForEntity("http://localhost:" + port + "/tasks/edit/" + task.getId(), String.class);
+		// Assert
+		assertThat(response.getBody().contains("Create Task"), is(true));
+	}
 
-        // Then
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+	@Test
+	void testShowEditTaskForm() {
+		// Given
+		Task task = taskRepository.findAll().get(0);
 
-        // Assert
-        assertThat(response.getBody().contains("Edit Task"), is(true));
-        assertThat(response.getBody().contains(task.getTitle()), is(true));
-    }
+		// When
+		ResponseEntity<String> response = restTemplate
+				.getForEntity("http://localhost:" + port + "/tasks/edit/" + task.getId(), String.class);
 
-    @Test
-    void testDeleteTaskById() {
-        // Given
-        Task task = taskRepository.findAll().get(0);
+		// Then
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 
-        // When
-        restTemplate.getForEntity("http://localhost:" + port + "/tasks/delete/" + task.getId(), String.class);
+		// Assert
+		assertThat(response.getBody().contains("Edit Task"), is(true));
+		assertThat(response.getBody().contains(task.getTitle()), is(true));
+	}
 
-        // Then
-        try {
-            taskRepository.findById(task.getId()).orElseThrow();
-        } catch (HttpClientErrorException e) {
-            // Assert
-            assertThat(e.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
-        }
-    }
+	@Test
+	void testDeleteTaskById() {
+		// Given
+		Task task = taskRepository.findAll().get(0);
+
+		// When
+		restTemplate.getForEntity("http://localhost:" + port + "/tasks/delete/" + task.getId(), String.class);
+
+		// Then
+		try {
+			taskRepository.findById(task.getId()).orElseThrow();
+		} catch (HttpClientErrorException e) {
+			// Assert
+			assertThat(e.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+		}
+	}
 }

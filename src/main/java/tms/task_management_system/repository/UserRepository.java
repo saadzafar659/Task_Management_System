@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import tms.task_management_system.entity.Users;
 
 @Repository
-public interface UserRepository extends JpaRepository<Users, Long> 
-{
-	
+public interface UserRepository extends JpaRepository<Users, Long> {
+
 }

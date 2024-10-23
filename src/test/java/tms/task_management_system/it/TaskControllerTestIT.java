@@ -73,7 +73,7 @@ class TaskControllerTestIT extends Conn {
 	@Test
 	void testGetTaskById() {
 		// Given
-		Task savedTask = taskRepository.findAll().get(0); 
+		Task savedTask = taskRepository.findAll().get(0);
 
 		// When
 		ResponseEntity<Task> response = restTemplate
@@ -87,8 +87,7 @@ class TaskControllerTestIT extends Conn {
 
 	@Test
 	void testCreateTask() {
-		
-		
+
 		// When
 		ResponseEntity<TaskDTO> response = restTemplate.postForEntity("http://localhost:" + port + "/api/tasks/create",
 				validTaskDTO, TaskDTO.class);
