@@ -134,7 +134,7 @@ class UserWebControllerTest {
 	}
 
 	@Test
-	 void testDeleteUserById() throws Exception {
+	void testDeleteUserById() throws Exception {
 		// When
 		// Then
 		// DELETE request

@@ -15,26 +15,23 @@ import jakarta.validation.constraints.NotBlank;
 @Entity
 @Table(name = "task")
 public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @NotBlank(message = "Title cannot be empty")
-    private String title;
-    
-    
-    private String description;
-    
-    
-    private String deadline;
-    
-    
-    private String status;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("tasks")
-    private Users user;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank(message = "Title cannot be empty")
+	private String title;
+
+	private String description;
+
+	private String deadline;
+
+	private String status;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties("tasks")
+	private Users user;
 
 	public Long getId() {
 		return id;
@@ -96,7 +93,7 @@ public class Task {
 
 	public Task() {
 		super();
-		
+
 	}
 
 	@Override
@@ -105,5 +102,4 @@ public class Task {
 				+ ", status=" + status + ", user=" + user + "]";
 	}
 
-   
 }

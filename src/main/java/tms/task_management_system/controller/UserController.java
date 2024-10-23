@@ -47,7 +47,6 @@ public class UserController {
 		return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
 	}
 
-
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 		Optional<Users> existingUserOpt = userService.getUserById(id);

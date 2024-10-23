@@ -66,7 +66,6 @@ class TaskControllerTest {
 		taskList = Arrays.asList(task1, task2);
 
 		validTaskDTO = new TaskDTO(3L, "New Task Title", "Description of the new task", "2024-5-31", "Pending", 1L);
-		
 
 		user = new Users(1L, "Saad Zafar", "saad@gmail.com", "password1", "ADMIN", null);
 		task = new Task(3L, "New Task Title", "Description of the new task", "2024-5-31", "Pending", user);
@@ -115,7 +114,6 @@ class TaskControllerTest {
 		mockMvc.perform(get("/api/tasks/{id}", taskId)).andExpect(status().isNotFound());
 	}
 
-	
 	@Test
 	void testCreateTask() throws Exception {
 		// Given
@@ -128,7 +126,6 @@ class TaskControllerTest {
 		// Verify
 		verify(taskService, times(1)).saveTask(any(Task.class));
 	}
-	
 
 	@Test
 	void testDeleteTask() throws Exception {

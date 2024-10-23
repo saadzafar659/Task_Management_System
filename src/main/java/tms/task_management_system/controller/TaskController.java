@@ -21,46 +21,41 @@ import tms.task_management_system.service.TaskService;
 @RequestMapping("/api/tasks")
 public class TaskController {
 
-    private final TaskService taskService;
+	private final TaskService taskService;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+	public TaskController(TaskService taskService) {
+		this.taskService = taskService;
+	}
 
-    @GetMapping("/getAll")
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
-    }
+	@GetMapping("/getAll")
+	public List<Task> getAllTasks() {
+		return taskService.getAllTasks();
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        Optional<Task> taskOptional = taskService.getTaskById(id);
-        return taskOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+		Optional<Task> taskOptional = taskService.getTaskById(id);
+		return taskOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
 
-   
-    @PostMapping("/create")
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
-        Task task = taskDTO.toTask();
-        Task savedTask = taskService.saveTask(task);
-        TaskDTO savedTaskDTO = new TaskDTO(savedTask.getId(), savedTask.getTitle(), savedTask.getDescription(),
-                savedTask.getDeadline(), savedTask.getStatus(), savedTask.getUser().getId());
-        return new ResponseEntity<>(savedTaskDTO, HttpStatus.CREATED);
-    }
+	@PostMapping("/create")
+	public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+		Task task = taskDTO.toTask();
+		Task savedTask = taskService.saveTask(task);
+		TaskDTO savedTaskDTO = new TaskDTO(savedTask.getId(), savedTask.getTitle(), savedTask.getDescription(),
+				savedTask.getDeadline(), savedTask.getStatus(), savedTask.getUser().getId());
+		return new ResponseEntity<>(savedTaskDTO, HttpStatus.CREATED);
+	}
 
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+		Optional<Task> taskOptional = taskService.getTaskById(id);
+		if (!taskOptional.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
 
+		taskService.deleteTaskById(id);
+		return ResponseEntity.noContent().build();
+	}
 
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        Optional<Task> taskOptional = taskService.getTaskById(id);
-        if (!taskOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        taskService.deleteTaskById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    
 }

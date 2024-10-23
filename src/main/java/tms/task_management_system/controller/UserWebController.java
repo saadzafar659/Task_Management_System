@@ -18,8 +18,8 @@ import tms.task_management_system.service.UserService;
 public class UserWebController {
 
 	private static final String REDIRECT_USERS = "redirect:/users";
-	
-	 private static final String FLASH_MESSAGE_KEY = "message";
+
+	private static final String FLASH_MESSAGE_KEY = "message";
 
 	private final UserService userService;
 

@@ -14,16 +14,16 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class Users {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String email;
-    private String password;
-    private String role;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String name;
+	private String email;
+	private String password;
+	private String role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Task> tasks;
 
 	public Long getId() {
 		return id;
@@ -85,7 +85,7 @@ public class Users {
 
 	public Users() {
 		super();
-		
+
 	}
 
 	@Override
@@ -94,5 +94,4 @@ public class Users {
 				+ ", tasks=" + tasks + "]";
 	}
 
-    
 }

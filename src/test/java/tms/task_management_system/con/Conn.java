@@ -16,26 +16,23 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ActiveProfiles("test")
 public abstract class Conn {
 
-    private static final MySQL5Container mysql5Container = MySQL5Container.getInstance();
+	private static final MySQL5Container mysql5Container = MySQL5Container.getInstance();
 
-    @BeforeAll
-    public static void startContainer() {
-        mysql5Container.start();
-        try (Connection connection = DriverManager.getConnection(
-                mysql5Container.getJdbcUrl(),
-                mysql5Container.getUsername(),
-                mysql5Container.getPassword()
-        )) {
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate("CREATE DATABASE IF NOT EXISTS mydb;");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to create database", e);
-        }
-    }
+	@BeforeAll
+	public static void startContainer() {
+		mysql5Container.start();
+		try (Connection connection = DriverManager.getConnection(mysql5Container.getJdbcUrl(),
+				mysql5Container.getUsername(), mysql5Container.getPassword())) {
+			try (Statement statement = connection.createStatement()) {
+				statement.executeUpdate("CREATE DATABASE IF NOT EXISTS mydb;");
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to create database", e);
+		}
+	}
 
-    @AfterAll
-    public static void stopContainer() {
-        
-    }
+	@AfterAll
+	public static void stopContainer() {
+
+	}
 }

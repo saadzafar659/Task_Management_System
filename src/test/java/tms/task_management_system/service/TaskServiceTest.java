@@ -83,8 +83,7 @@ class TaskServiceTest {
 		assertEquals(savedTask.getTitle(), result.getTitle());
 		verify(taskRepository).save(task);
 	}
-	
-	
+
 	@Test
 	void testDeleteTaskById() {
 		// Given
