@@ -15,7 +15,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 import tms.task_management_system.con.Conn;
 import tms.task_management_system.dto.TaskDTO;
@@ -44,7 +43,6 @@ class TaskControllerTestIT extends Conn {
 	private Users user;
 
 	@BeforeEach
-	@Transactional
 	public void setUp() {
 		taskRepository.deleteAll();
 		userRepository.deleteAll();

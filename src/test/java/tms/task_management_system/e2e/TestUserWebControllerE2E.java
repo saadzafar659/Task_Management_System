@@ -1,5 +1,9 @@
 package tms.task_management_system.e2e;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,16 +15,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.transaction.annotation.Transactional;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import tms.task_management_system.con.Conn;
 import tms.task_management_system.entity.Users;
 import tms.task_management_system.repository.UserRepository;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TestUserWebControllerE2E extends Conn {
@@ -34,7 +33,6 @@ class TestUserWebControllerE2E extends Conn {
 	private WebDriver driver;
 
 	@BeforeEach
-	@Transactional
 	public void setUp() {
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
