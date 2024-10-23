@@ -30,7 +30,13 @@ jobs:
           
       - name: Start MySQL container
         run: |
-          docker run --name mysql-test -e MYSQL_ROOT_PASSWORD=root_password -e MYSQL_DATABASE=task_management -p 3308:3306 -d mysql:5.7
+          docker run --name mysql-test \
+            -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+            -e MYSQL_DATABASE=task_management \
+            -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+            -p 3308:3306 \
+            -d mysql:5.7
 
       - name: Cache Maven packages
         uses: actions/cache@v3
