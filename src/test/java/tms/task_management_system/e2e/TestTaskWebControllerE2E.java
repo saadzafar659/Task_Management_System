@@ -16,7 +16,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.transaction.annotation.Transactional;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import tms.task_management_system.con.Conn;
@@ -41,7 +40,6 @@ class TestTaskWebControllerE2E extends Conn {
     private Users user;
 
     @BeforeEach
-    @Transactional
     public void setUp() {        
         WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
